@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"encoding/json"
@@ -68,18 +67,18 @@ func (bot *DiscordBot) Send(message string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(json_obj))
 
 	resp, err := http.Post(bot.Url, "application/json", bytes.NewReader(json_obj))
 	if err != nil {
 		return err
 	}
 
+	/*
 	buf, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(buf))
+	*/
 
 	err = resp.Body.Close()
 	if err != nil {
