@@ -27,19 +27,18 @@ func GetOAuth(client_id string) (string, string, error) {
 	m := http.NewServeMux()
 	s := http.Server{Addr: "localhost:80", Handler: m}
 
-	access_token, token_type := "", ""
+	access_token := ""
 
 	m.HandleFunc("/token", func(w http.ResponseWriter, r *http.Request) {
+		// TODO: Add check for favicon stuff
+
 		url_params := r.URL.Query()
 
 		if temp, err := url_params["access_token"]; err {
 			access_token = temp[0]
 		}
 
-		if temp, err := url_params["token_type"]; err {
-			token_type = temp[0]
-		}
-
+		log.Println("Shutting Down HTTP Server")
 		s.Shutdown(context.Background())
 	})
 
@@ -47,7 +46,7 @@ func GetOAuth(client_id string) (string, string, error) {
 		// TODO: Add check for favicon stuff
 
 		url_params := r.URL.Query()
-		if _, err := url_params["error"]; err { // TODO: Make pretty
+		if _, err := url_params["error"]; err { // TODO: Make this return an error in the parent function
 			log.Fatalln("Twitch Authentication Error:", url_params["error"][0], url_params["error_description"][0])
 		}
 
@@ -57,13 +56,14 @@ func GetOAuth(client_id string) (string, string, error) {
 		// didn't want me to do.
 		// Don't you just love security?
 		fmt.Fprintln(w, `<script>
-			document.location.href = "http://localhost/token?" + document.location.hash.substr(1)
+			document.location.href = "http://localhost/token?" + document.location.hash.substr(1);
 		</script>`)
 	})
 
+	log.Println("Starting HTTP Server")
 	if err = s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		return "", "", err
+		return "", err
 	}
 
-	return access_token, token_type, nil
+	return access_token, nil
 }

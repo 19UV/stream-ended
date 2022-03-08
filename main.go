@@ -19,7 +19,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println(config)
+	// fmt.Println(config)
 
 	access_token, _, err := GetOAuth(config.Twitch.Id)
 	if err != nil {
