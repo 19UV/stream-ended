@@ -8,6 +8,13 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
+const (
+	DISCORD_WEBHOOK_DEFAULT = "<INSERT DISCORD WEBHOOK>"
+	DISCORD_MESSAGE_DEFAULT = "@everyone {{.User}} just went Offline!"
+	TWITCH_APP_ID_DEFAULT = "<INSERT TWITCH APPLICATION ID>"
+	TWITCH_CHANNEL_DEFAULT = "19UV"
+)
+
 type BotConfig struct {
 	Discord struct {
 		Webhook string `yaml:"webhook"`
@@ -35,24 +42,25 @@ func ParseConfig() (*BotConfig, error) {
 	}
 
 	config := BotConfig{}
+	config.Discord.Webhook = DISCORD_WEBHOOK_DEFAULT
+	config.Discord.Message = DISCORD_MESSAGE_DEFAULT
+	config.Twitch.Id = TWITCH_APP_ID_DEFAULT
+	config.Twitch.User = TWITCH_CHANNEL_DEFAULT
+	
 	err = yaml.Unmarshal(data, &config)
 	if err != nil {
 		return nil, err
 	}
 
-	if config.Discord.Webhook == "" {
+	if config.Discord.Webhook == DISCORD_WEBHOOK_DEFAULT {
 		return nil, ConfigError{ "discord.webhook required, but not included" }
 	}
 
-	if config.Twitch.Id == "" {
+	if config.Twitch.Id == TWITCH_APP_ID_DEFAULT {
 		return nil, ConfigError{ "twitch.id required, but not included" }
 	}
 
-	if config.Twitch.User == "" {
-		return nil, ConfigError{ "twitch.user required, but not included" }
-	}
-
-	if config.Discord.Message == "" {
+	if config.Discord.Message == DISCORD_MESSAGE_DEFAULT {
 		config.Discord.Message = "@everyone {{.User}} just went Offline!"
 	}
 
