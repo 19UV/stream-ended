@@ -11,8 +11,8 @@ import (
 const (
 	DISCORD_WEBHOOK_DEFAULT = "<INSERT DISCORD WEBHOOK>"
 	DISCORD_MESSAGE_DEFAULT = "@everyone {{.User}} just went Offline!"
-	TWITCH_APP_ID_DEFAULT = "<INSERT TWITCH APPLICATION ID>"
-	TWITCH_CHANNEL_DEFAULT = "19UV"
+	TWITCH_APP_ID_DEFAULT   = "<INSERT TWITCH APPLICATION ID>"
+	TWITCH_CHANNEL_DEFAULT  = "19UV"
 )
 
 type BotConfig struct {
@@ -22,7 +22,7 @@ type BotConfig struct {
 	}
 
 	Twitch struct {
-		Id string `yaml:"id"`
+		Id   string `yaml:"id"`
 		User string `yaml:"user"`
 	}
 }
@@ -46,18 +46,18 @@ func ParseConfig() (*BotConfig, error) {
 	config.Discord.Message = DISCORD_MESSAGE_DEFAULT
 	config.Twitch.Id = TWITCH_APP_ID_DEFAULT
 	config.Twitch.User = TWITCH_CHANNEL_DEFAULT
-	
+
 	err = yaml.Unmarshal(data, &config)
 	if err != nil {
 		return nil, err
 	}
 
 	if config.Discord.Webhook == DISCORD_WEBHOOK_DEFAULT {
-		return nil, ConfigError{ "discord.webhook required, but not included" }
+		return nil, ConfigError{"discord.webhook required, but not included"}
 	}
 
 	if config.Twitch.Id == TWITCH_APP_ID_DEFAULT {
-		return nil, ConfigError{ "twitch.id required, but not included" }
+		return nil, ConfigError{"twitch.id required, but not included"}
 	}
 
 	if config.Discord.Message == DISCORD_MESSAGE_DEFAULT {
@@ -70,7 +70,7 @@ func ParseConfig() (*BotConfig, error) {
 	}
 
 	buf := new(strings.Builder)
-	err = template.Execute(buf, map[string]string{ "User": config.Twitch.User })
+	err = template.Execute(buf, map[string]string{"User": config.Twitch.User})
 	if err != nil {
 		return nil, err
 	}

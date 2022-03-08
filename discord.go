@@ -1,25 +1,25 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"encoding/json"
-	"bytes"
 )
 
 type DiscordWebhookObject struct {
 	Type int `json:"type"`
 
-	Id string `json:"id"`
+	Id    string `json:"id"`
 	Token string `json:"token"`
 
 	Name string `json:"name"`
 }
 
 type DiscordSendObject struct {
-	Username string `json:"username"`
+	Username  string `json:"username"`
 	AvatarURL string `json:"avatar_url"`
-	Content string `json:"content"`
+	Content   string `json:"content"`
 }
 
 type DiscordBot struct {
@@ -74,10 +74,10 @@ func (bot *DiscordBot) Send(message string) error {
 	}
 
 	/*
-	buf, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
+		buf, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return err
+		}
 	*/
 
 	err = resp.Body.Close()
@@ -89,7 +89,7 @@ func (bot *DiscordBot) Send(message string) error {
 }
 
 func DiscordBotInitialize(webhook_url string) (*DiscordBot, error) {
-	res := &DiscordBot{ webhook_url, nil }
+	res := &DiscordBot{webhook_url, nil}
 	_, err := res.Get()
 	if err != nil {
 		return nil, err

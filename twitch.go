@@ -5,9 +5,9 @@ import (
 	"log"
 
 	"context"
-	"net/url"
-	"net/http"
 	"github.com/pkg/browser"
+	"net/http"
+	"net/url"
 )
 
 func GetOAuth(client_id string) (string, string, error) {
@@ -18,7 +18,7 @@ func GetOAuth(client_id string) (string, string, error) {
 	url_params.Add("scope", "")
 
 	twitch_url := "https://id.twitch.tv/oauth2/authorize?" + url_params.Encode()
-	
+
 	err := browser.OpenURL(twitch_url)
 	if err != nil {
 		fmt.Println("Please Visit:", twitch_url)
@@ -39,7 +39,7 @@ func GetOAuth(client_id string) (string, string, error) {
 		if temp, err := url_params["token_type"]; err {
 			token_type = temp[0]
 		}
-		
+
 		s.Shutdown(context.Background())
 	})
 

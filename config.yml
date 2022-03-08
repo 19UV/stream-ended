@@ -1,0 +1,7 @@
+discord:
+  webhook: "<INSERT DISCORD WEBHOOK>"
+  message: "@everyone {{.User}} just went Offline!"
+
+twitch:
+  id: "<INSERT TWITCH APPLICATION ID>"
+  user: 19uv
